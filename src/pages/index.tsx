@@ -1,4 +1,5 @@
 import type { NextPage } from "next";
+import { signIn, signOut, useSession } from "next-auth/react";
 import Head from "next/head";
 import Image from "next/image";
 import { useEffect, useState } from "react";
@@ -25,6 +26,8 @@ const Home: NextPage = () => {
 		console.log(id);
 	};
 
+	const { data: session, status } = useSession();
+
 	return (
 		<>
 			<Head>
@@ -33,6 +36,39 @@ const Home: NextPage = () => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<main>
+				<header className="bg-slate-800 lg:px-10 py-2 inline-flex w-full justify-end fixed top-0">
+					{status === "unauthenticated" && (
+						<div>
+							<button
+								className={btn + "bg-emerald-500"}
+								onClick={() => signIn()}
+							>
+								Login
+							</button>
+						</div>
+					)}
+					{status === "authenticated" && (
+						<div className="space-x-4 text-sm font-bold text-white">
+							<span>{session.user?.name}</span>
+							<button
+								className={btn + "bg-emerald-500"}
+								onClick={() => signOut()}
+							>
+								Logout
+							</button>
+						</div>
+					)}
+					{status === "loading" && (
+						<div className="space-x-4 text-sm font-bold text-white">
+							<button
+								className={btn + "bg-emerald-500 animate-pulse"}
+								onClick={() => signOut()}
+							>
+								Loading...
+							</button>
+						</div>
+					)}
+				</header>
 				<div className="h-screen w-screen bg-slate-900 flex flex-col items-center space-y-5 pt-[10rem] text-white">
 					<h1 className="text-2xl">Which Pokémon is rounder again</h1>
 					<div className="border rounded p-8 pb-4 flex justify-between items-center max-w-2xl">
