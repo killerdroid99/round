@@ -1,12 +1,23 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { voteOptions } from "../utils/getRandomPokemon";
-// import { trpc } from "../utils/trpc";
+import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
 	const [options, setOptions] = useState<number[]>([]);
 	useEffect(() => setOptions(voteOptions()), []);
+
+	const firstPokemon = trpc.useQuery([
+		"pokemon.get-pokemon-by-id",
+		{ id: options[0] as number },
+	]);
+
+	const secondPokemon = trpc.useQuery([
+		"pokemon.get-pokemon-by-id",
+		{ id: options[1] as number },
+	]);
 
 	return (
 		<>
@@ -16,15 +27,43 @@ const Home: NextPage = () => {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<main>
-				<div className="h-screen w-screen bg-slate-900 flex flex-col items-center space-y-5 justify-center text-white">
+				<div className="h-screen w-screen bg-slate-900 flex flex-col items-center space-y-5 pt-[10rem] text-white">
 					<h1 className="text-2xl">Which Pokémon is rounder again</h1>
 					<div className="border rounded p-8 flex justify-between items-center max-w-2xl">
-						<div className="w-16 aspect-square bg-red-200 text-black">
-							{options[0]}
+						<div className="w-[50rem] aspect-square place-items-center text-center">
+							{firstPokemon.isLoading ? (
+								<div>Loading Pokémon...</div>
+							) : (
+								<>
+									<span className="text-xl text-center capitalize w-full -mb-8">
+										{firstPokemon.data?.name}
+									</span>
+									<Image
+										src={firstPokemon.data?.sprites.front_default as string}
+										alt={options[0]?.toString() as string}
+										width={250}
+										height={250}
+									/>
+								</>
+							)}
 						</div>
-						<div className="p-8">Vs</div>
-						<div className="w-16 aspect-square bg-red-200 text-black">
-							{options[1]}
+						<div className="p-8 text-lg">Vs</div>
+						<div className="w-[50rem] aspect-square place-items-center text-center">
+							{secondPokemon.isLoading ? (
+								<div>Loading Pokémon...</div>
+							) : (
+								<>
+									<span className="text-xl text-center capitalize w-full -mb-8">
+										{secondPokemon.data?.name}
+									</span>
+									<Image
+										src={secondPokemon.data?.sprites.front_default as string}
+										alt={options[1]?.toString() as string}
+										width={250}
+										height={250}
+									/>
+								</>
+							)}
 						</div>
 					</div>
 				</div>
