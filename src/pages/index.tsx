@@ -6,6 +6,8 @@ import { voteOptions } from "../utils/getRandomPokemon";
 import { trpc } from "../utils/trpc";
 
 const Home: NextPage = () => {
+	const btn =
+		"inline-flex items-center px-2.5 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500";
 	const [options, setOptions] = useState<number[]>([]);
 	useEffect(() => setOptions(voteOptions()), []);
 
@@ -19,6 +21,10 @@ const Home: NextPage = () => {
 		{ id: options[1] as number },
 	]);
 
+	const voteForRoundest = (id: number) => {
+		console.log(id);
+	};
+
 	return (
 		<>
 			<Head>
@@ -29,7 +35,7 @@ const Home: NextPage = () => {
 			<main>
 				<div className="h-screen w-screen bg-slate-900 flex flex-col items-center space-y-5 pt-[10rem] text-white">
 					<h1 className="text-2xl">Which Pokémon is rounder again</h1>
-					<div className="border rounded p-8 pb-0 flex justify-between items-center max-w-2xl">
+					<div className="border rounded p-8 pb-4 flex justify-between items-center max-w-2xl">
 						<div className="w-[50rem] aspect-square place-items-center text-center">
 							{firstPokemon.isLoading ? (
 								<div>Loading Pokémon...</div>
@@ -44,6 +50,12 @@ const Home: NextPage = () => {
 										width={250}
 										height={250}
 									/>
+									<button
+										onClick={() => voteForRoundest(options[0] as number)}
+										className={btn}
+									>
+										Rounder
+									</button>
 								</>
 							)}
 						</div>
@@ -62,6 +74,12 @@ const Home: NextPage = () => {
 										width={250}
 										height={250}
 									/>
+									<button
+										onClick={() => voteForRoundest(options[1] as number)}
+										className={btn}
+									>
+										Rounder
+									</button>
 								</>
 							)}
 						</div>
