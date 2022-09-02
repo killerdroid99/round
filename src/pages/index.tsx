@@ -29,7 +29,7 @@ const Home: NextPage = () => {
 			<main>
 				<div className="h-screen w-screen bg-slate-900 flex flex-col items-center space-y-5 pt-[10rem] text-white">
 					<h1 className="text-2xl">Which Pokémon is rounder again</h1>
-					<div className="border rounded p-8 flex justify-between items-center max-w-2xl">
+					<div className="border rounded p-8 pb-0 flex justify-between items-center max-w-2xl">
 						<div className="w-[50rem] aspect-square place-items-center text-center">
 							{firstPokemon.isLoading ? (
 								<div>Loading Pokémon...</div>
